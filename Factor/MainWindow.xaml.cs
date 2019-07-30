@@ -22,18 +22,27 @@ namespace Factor
     public partial class MainWindow : Window
     {
         private static IntPtr _trackedWindow;
-        private const string _windowName = "Untitled - Notepad";
+        private const string _windowName = "Elder Scrolls Online";
 
         public MainWindow()
         {
             InitializeComponent();
             _trackedWindow = User32.FindWindow(null, _windowName);
+            Deactivated += MainWindow_Deactivated;
             UpdatePosition();
+        }
+
+        private void MainWindow_Deactivated(object sender, EventArgs e)
+        {
+            Window window = (Window)sender;
+            window.Topmost = true;
         }
 
         public void UpdatePosition()
         {
-            if (User32.GetForegroundWindow() == _trackedWindow)
+            IntPtr foregroundWindow = User32.GetForegroundWindow();
+            IntPtr windowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
+            if (foregroundWindow == _trackedWindow)
             {
                 var rect = User32.GetWindowRect(_trackedWindow, true);
                 Top = rect.Top;
@@ -41,7 +50,7 @@ namespace Factor
                 Width = rect.Width;
                 Height = rect.Height;
             }
-            else
+            else if (foregroundWindow != null && foregroundWindow != windowHandle)
             {
                 Top = -32000;
                 Left = -32000;
@@ -54,7 +63,6 @@ namespace Factor
         {
             var hwnd = new WindowInteropHelper(this).Handle;
             User32.SetWindowExStyle(hwnd, User32.WsExToolWindow); // removes window from toolbar and alt+tab
-            //User32.SetWindowExStyle(hwnd, User32.WsExTransparent | User32.WsExToolWindow);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

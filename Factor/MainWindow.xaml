@@ -12,7 +12,7 @@
         Background="Transparent"
         SourceInitialized="Window_SourceInitialized">
     <Grid>
-        <Button Height="100" Width="100" Click="Button_Click">
+        <Button Name="ChaosButton" Height="100" Width="100" Click="Button_Click" HorizontalAlignment="Left" VerticalAlignment="Top">
             <StackPanel>
                 <Image Source="Chaos.jpg" />
                 <TextBlock>chaos is a ladder</TextBlock>
